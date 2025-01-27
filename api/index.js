@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 const express = require("express");
-const { MongoDBConnect } = require("./db/db.connect.js");
+const { MongoDBConnect } = require("../db/db.connect.js");
 MongoDBConnect();
-const { movieModel } = require(`./models/movies.model.js`);
+const { movieModel } = require(`../models/movies.model.js`);
 
 const app = express();
 
