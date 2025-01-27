@@ -2,9 +2,11 @@ const mongoose = require("mongoose");
 const express = require("express");
 const { MongoDBConnect } = require("../db/db.connect.js");
 MongoDBConnect();
-const { movieModel, eventsModel } = require(`../models/movies.model.js`);
+const { movieModel } = require(`../models/movies.model.js`);
+const { eventsModel } = require(`../models/Eventsmodel.js`);
 
 const app = express();
+app.use(express.json());
 
 app.route("/movies").get(async (req, res) => {
   try {
@@ -22,6 +24,7 @@ app.route("/movies").get(async (req, res) => {
 app.route("/events").get(async (req, res) => {
   try {
     const data = await eventsModel.find();
+
     if (data.length > 0) {
       res.status(200).json(data);
     } else {
@@ -32,4 +35,19 @@ app.route("/events").get(async (req, res) => {
   }
 });
 
-app.listen(5500, () => `Backend-Integration Web Server is Online`);
+app.route("/events").post(async (req, res) => {
+  try {
+    const data = req.body;
+    console.log(data);
+    const newEvent = new eventsModel(data);
+    await newEvent.save();
+    res.status(200).json({ message: "successfully stored" });
+  } catch (err) {
+    console.log(`Failed to Fetch Data from DB ${err}`);
+    res
+      .status(500)
+      .json({ message: `Failed to Fetch Data from DB ${err.message}` });
+  }
+});
+
+app.listen(5500, () => console.log(`Backend-Integration Web Server is Online`));
