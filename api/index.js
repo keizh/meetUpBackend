@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const cors = require("cors");
 const express = require("express");
 const { MongoDBConnect } = require("../db/db.connect.js");
 MongoDBConnect();
@@ -7,6 +8,12 @@ const { eventsModel } = require(`../models/Eventsmodel.js`);
 
 const app = express();
 app.use(express.json());
+app.use(
+  cors({
+    origin: "*",
+    methods: ["GET", "POST"],
+  })
+);
 
 app.route("/movies").get(async (req, res) => {
   try {
